@@ -144,9 +144,9 @@ async def _dry_setup(hass: HomeAssistant, _: Config) -> bool:
             async_dispatcher_send(hass, EVENT_NEW_HOUR)
 
         @backoff.on_exception(
-            backoff.expo,
+            backoff.constant,
             (InvalidValueException),
-            logger=_LOGGER, max_value=600, max_time=7200)
+            logger=_LOGGER, interval=600, max_time=7200)
         async def new_data_cb(_):
             """Callback to fetch new data for tomorrows prices at 1300ish CET
             and notify any sensors, about the new data
